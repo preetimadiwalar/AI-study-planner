@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Brain } from "lucide-react";
+import { Brain, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -97,10 +97,19 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center p-4">
       <Card className={`w-full ${isSignup ? "max-w-xl" : "max-w-md"} animate-fade-up glass-panel`}>
         <CardHeader className="text-center">
-          <Link to="/" className="mx-auto mb-2 flex items-center gap-2 font-heading text-xl font-bold text-foreground">
-            <Brain className="h-6 w-6 text-primary" />
-            AI Study Planner
-          </Link>
+            {/* Show back link only on Login view (hide on Sign Up) */}
+            {!isSignup && (
+              <div className="w-full flex justify-start mb-2">
+                <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+                  <ArrowLeft className="h-4 w-4" /> Back to Home
+                </Link>
+              </div>
+            )}
+
+            <Link to="/" className="mx-auto mb-2 flex items-center gap-2 font-heading text-xl font-bold text-foreground">
+              <Brain className="h-6 w-6 text-primary" />
+              AI Study Planner
+            </Link>
           <CardTitle className="text-2xl">{isSignup ? "Create Account" : "Welcome Back"}</CardTitle>
           <CardDescription>
             {isSignup ? "Join the AI Planner challenge — fill in your details below." : "Log in to your study planner"}

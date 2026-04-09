@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-const heroIllustration = "/hero-illustration.svg";
+const heroIllustration = "/boy.png";
 
 const HeroSection = () => (
   <section
@@ -25,19 +25,19 @@ const HeroSection = () => (
             </p>
             <div className="mt-4">
               <Button size="lg" className="h-16 px-12 text-lg font-bold uppercase tracking-widest shadow-[0_0_30px_rgba(255,0,0,0.4)] hover:shadow-[0_0_60px_rgba(255,0,0,0.6)] transition-all bg-primary hover:bg-primary/90 text-black rounded-none" asChild>
-                <Link to="/planner">Initialize Planner Scan</Link>
+                <Link to="/login">Initialize Planner Scan</Link>
               </Button>
             </div>
         </div>
 
         {/* Right Side: Boy Illustration */}
-        <div className="relative hidden lg:block group">
+        <div className="relative hidden lg:flex justify-center items-center">
             <div className="absolute inset-0 bg-primary/20 blur-[150px] rounded-full opacity-40" />
-            
-            {/* illustration removed */}
-
-            {/* Architectural Frame Markers */}
-            {/* top-left architectural frame marker removed */}
+            <img
+              src={heroIllustration}
+              alt="AI Study Boy Illustration"
+              className="w-full max-w-[600px] h-auto object-contain relative z-10 animate-fade-in opacity-80"
+            />
         </div>
     </div>
   </section>

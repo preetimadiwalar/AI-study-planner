@@ -30,9 +30,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-transparent">
-      <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 font-heading text-xl font-bold text-foreground">
+    <nav className="sticky top-6 z-50 bg-transparent">
+      <div className="container flex h-14 items-center justify-between">
+        <Link to="/" className="flex items-center gap-2 font-heading text-2xl font-bold text-foreground">
           <Brain className="h-6 w-6 text-primary" />
           AI Study Planner
         </Link>
@@ -44,7 +44,7 @@ const Navbar = () => {
               <button
                 key={item.label}
                 onClick={() => handleNavClick(item)}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                    className="text-base font-medium text-muted-foreground transition-colors hover:text-primary"
               >
                 {item.label}
               </button>
@@ -52,13 +52,13 @@ const Navbar = () => {
               <Link
                 key={item.label}
                 to={item.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                className="text-base font-medium text-muted-foreground transition-colors hover:text-primary"
               >
                 {item.label}
               </Link>
             )
           )}
-          <Button size="sm" asChild>
+          <Button size="lg" className="px-5 py-2 text-lg rounded-full" asChild>
             <Link to="/login">Login / Signup</Link>
           </Button>
         </div>
@@ -76,13 +76,13 @@ const Navbar = () => {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="border-t bg-card md:hidden">
-          <div className="container flex flex-col gap-4 py-4">
+          <div className="container flex flex-col gap-3 py-3">
             {navItems.map((item) =>
               item.scroll ? (
                 <button
                   key={item.label}
                   onClick={() => handleNavClick(item)}
-                  className="text-left text-sm font-medium text-muted-foreground hover:text-primary"
+                  className="text-left text-base font-medium text-muted-foreground hover:text-primary"
                 >
                   {item.label}
                 </button>
@@ -90,16 +90,16 @@ const Navbar = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-primary"
+                  className="text-base font-medium text-muted-foreground hover:text-primary"
                   onClick={() => setMobileOpen(false)}
                 >
                   {item.label}
                 </Link>
               )
             )}
-            <Button size="sm" className="w-fit" asChild>
-              <Link to="/login">Login / Signup</Link>
-            </Button>
+              <Button size="lg" className="w-fit px-5 py-2 text-lg rounded-full" asChild>
+                <Link to="/login">Login / Signup</Link>
+              </Button>
           </div>
         </div>
       )}
