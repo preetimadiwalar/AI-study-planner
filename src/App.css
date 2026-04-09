@@ -40,3 +40,20 @@
 .read-the-docs {
   color: #888;
 }
+
+/* AI particles background adjustments */
+.ai-particles-bg {
+  display: block;
+  will-change: transform;
+  transition: opacity 600ms ease;
+}
+
+/* Performance: ensure the canvas sits behind content */
+html, body, #root {
+  height: 100%;
+}
+
+/* Optional: reduce pointer events to keep interactions responsive */
+.ai-particles-bg {
+  pointer-events: none;
+}

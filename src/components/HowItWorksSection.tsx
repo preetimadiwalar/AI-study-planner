@@ -5,23 +5,42 @@ const steps = [
 ];
 
 const HowItWorksSection = () => (
-  <section id="how-it-works" className="py-20 md:py-28">
-    <div className="container">
-      <div className="mb-14 text-center">
-        <h2 className="font-heading text-3xl font-bold text-foreground md:text-4xl">How It Works</h2>
-        <p className="mt-3 text-muted-foreground">Three simple steps to a smarter study routine.</p>
+  <section id="how-it-works" className="py-24 md:py-32 relative bg-transparent overflow-hidden font-body">
+    <div className="container relative z-10">
+      <div className="mb-20 text-center">
+        <div className="flex items-center justify-center gap-3 mb-4">
+           <span className="text-primary font-bold text-lg">//</span>
+           <span className="text-primary font-bold text-xs tracking-[0.3em] uppercase">The Process</span>
+        </div>
+        <h2 className="font-heading text-3xl md:text-5xl font-bold text-white tracking-tight">
+          How It <span className="text-primary">Works.</span>
+        </h2>
+        <p className="mt-4 text-muted-foreground text-lg font-light max-w-2xl mx-auto">
+          Deploying your study routine in three tactical phases. Simple, fast, and optimized.
+        </p>
       </div>
 
       <div className="grid gap-8 md:grid-cols-3">
         {steps.map((step, i) => (
           <div
             key={step.number}
-            className="relative rounded-lg border bg-card p-8 text-center transition-shadow hover:shadow-[var(--shadow-card-hover)] animate-fade-up"
-            style={{ animationDelay: `${i * 0.1}s`, boxShadow: "var(--shadow-card)" }}
+            className="group relative rounded-2xl border-2 border-white/5 bg-white/[0.02] p-10 transition-all duration-500 hover:border-primary/50 hover:bg-primary/[0.05] overflow-hidden"
           >
-            <span className="mb-4 inline-block font-heading text-4xl font-bold text-primary/20">{step.number}</span>
-            <h3 className="mb-2 font-heading text-lg font-semibold text-foreground">{step.title}</h3>
-            <p className="text-sm text-muted-foreground">{step.desc}</p>
+            {/* Architectural Background Number */}
+            <span className="absolute -top-6 -right-4 font-heading text-9xl font-black text-primary/5 group-hover:text-primary/10 transition-colors pointer-events-none select-none">
+              {step.number}
+            </span>
+
+            <div className="relative z-10">
+                <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-primary/30 bg-primary/5 text-primary font-heading text-2xl font-black shadow-[0_0_15px_rgba(255,0,0,0.2)] group-hover:bg-primary group-hover:text-black transition-all duration-300">
+                    {step.number}
+                </div>
+                <h3 className="mb-4 font-heading text-xl font-bold text-white uppercase tracking-tight">{step.title}</h3>
+                <p className="text-base text-muted-foreground leading-relaxed font-light">{step.desc}</p>
+            </div>
+
+            {/* Hover Glow */}
+            <div className="absolute bottom-0 left-0 h-1 w-0 bg-primary transition-all duration-500 group-hover:w-full shadow-[0_0_10px_rgba(255,0,0,0.8)]" />
           </div>
         ))}
       </div>
@@ -30,3 +49,4 @@ const HowItWorksSection = () => (
 );
 
 export default HowItWorksSection;
+

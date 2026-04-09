@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import AIParticlesBackground from "./components/AIParticlesBackground";
 import Index from "./pages/Index.tsx";
 import Planner from "./pages/Planner.tsx";
 import ProgressPage from "./pages/Progress.tsx";
@@ -15,6 +16,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <AIParticlesBackground />
       <Toaster />
       <Sonner />
       <BrowserRouter>
