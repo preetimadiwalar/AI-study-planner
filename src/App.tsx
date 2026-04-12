@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import AIParticlesBackground from "./components/AIParticlesBackground";
 import Index from "./pages/Index.tsx";
 import ProgressPage from "./pages/Progress.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -20,7 +21,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* Planner page removed - redirects to login via CTA */}
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/login" element={<Login />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

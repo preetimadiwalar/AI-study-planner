@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabase";
+import { useEffect } from "react";
 
 const navItems = [
   { label: "Home", href: "/", scroll: null },
@@ -12,8 +14,21 @@ const navItems = [
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsLoggedIn(!!session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleNavClick = (item: typeof navItems[0]) => {
     setMobileOpen(false);
@@ -59,7 +74,11 @@ const Navbar = () => {
             )
           )}
           <Button size="lg" className="px-5 py-2 text-lg rounded-full" asChild>
-            <Link to="/login">Login / Signup</Link>
+            {isLoggedIn ? (
+              <Link to="/dashboard">Go to Dashboard</Link>
+            ) : (
+              <Link to="/login">Login / Signup</Link>
+            )}
           </Button>
         </div>
 
@@ -98,7 +117,11 @@ const Navbar = () => {
               )
             )}
               <Button size="lg" className="w-fit px-5 py-2 text-lg rounded-full" asChild>
-                <Link to="/login">Login / Signup</Link>
+                {isLoggedIn ? (
+                  <Link to="/dashboard" onClick={() => setMobileOpen(false)}>Go to Dashboard</Link>
+                ) : (
+                  <Link to="/login" onClick={() => setMobileOpen(false)}>Login / Signup</Link>
+                )}
               </Button>
           </div>
         </div>

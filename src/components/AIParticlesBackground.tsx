@@ -81,14 +81,14 @@ const AIParticlesBackground: React.FC = () => {
     const flares: Flare[] = [];
 
     const colors = [
-      "rgba(255, 0, 50, 0.8)",   // Pure Neon Red
-      "rgba(255, 20, 147, 0.8)", // Hot Pink
-      "rgba(255, 69, 0, 0.8)",   // Red Orange
-      "rgba(255, 0, 100, 0.8)"   // Crimson
+      "rgba(225, 29, 72, 0.8)",    // Crimson
+      "rgba(255, 0, 0, 0.8)",      // Solid Red
+      "rgba(159, 18, 57, 0.8)",    // Rose 900
+      "rgba(190, 18, 60, 0.8)"     // Rose 800
     ];
 
-    for (let i = 0; i < 160; i++) {
-      sparks.push({
+    for (let i = 0; i < 40; i++) {
+        sparks.push({
         x: Math.random() * w,
         y: Math.random() * h,
         vx: (Math.random() - 0.5) * 0.6,
@@ -129,9 +129,8 @@ const AIParticlesBackground: React.FC = () => {
     const animate = (now: number) => {
       const dt = (now - lastTime) / 1000;
       lastTime = now;
-      time += 0.012; // Faster waves
+      time += 0.012;
 
-      // --- Background Layer ---
       bgCtx.fillStyle = "#000000";
       bgCtx.fillRect(0, 0, w, h);
 
@@ -159,20 +158,6 @@ const AIParticlesBackground: React.FC = () => {
 
       bgCtx.globalCompositeOperation = "screen";
 
-      // Much brighter Aurora Waves
-      const drawAurora = (cx: number, cy: number, r: number, color1: string, color2: string, op: number) => {
-        const gradient = bgCtx.createRadialGradient(cx, cy, 0, cx, cy, r);
-        gradient.addColorStop(0, color1);
-        gradient.addColorStop(0.4, color2);
-        gradient.addColorStop(1, "rgba(0,0,0,0)");
-        bgCtx.fillStyle = gradient;
-        bgCtx.globalAlpha = op;
-        bgCtx.fillRect(0, 0, w, h);
-      };
-
-      // Aurora Waves removed for "Full Black" background
-
-      // 4. Flares
       if (Math.random() < 0.02) spawnFlare();
       for (let i = flares.length - 1; i >= 0; i--) {
         const f = flares[i];
@@ -187,18 +172,15 @@ const AIParticlesBackground: React.FC = () => {
           continue;
         }
         const g = bgCtx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size);
-        g.addColorStop(0, `rgba(255, 30, 80, ${f.alpha * 0.4})`);
+        g.addColorStop(0, `rgba(225, 29, 72, ${f.alpha * 0.3})`);
         g.addColorStop(1, "rgba(0,0,0,0)");
         bgCtx.fillStyle = g;
         bgCtx.globalAlpha = 1;
         bgCtx.fillRect(0, 0, w, h);
       }
 
-      // Sparks (Brighter and larger)
       bgCtx.globalCompositeOperation = "lighter";
-      bgCtx.globalAlpha = 1;
       sparks.forEach(p => {
-        // Movement re-enabled
         p.x += p.vx + Math.sin(time * 2.0 + p.seed) * 0.3;
         p.y += p.vy + Math.cos(time * 2.0 + p.seed) * 0.3;
 
@@ -211,38 +193,29 @@ const AIParticlesBackground: React.FC = () => {
         p.alpha += (p.targetAlpha - p.alpha) * 0.05;
 
         const size = p.size * (1.6 + Math.sin(time * 3 + p.seed) * 0.5);
-        const width = size * 14; 
-        const height = size * 6; 
-        const radius = height / 2;
-
-        // Rotation re-enabled for dynamic look
+        
         bgCtx.save();
         bgCtx.translate(p.x, p.y);
-        bgCtx.rotate(time * 0.3 + p.seed); // Dynamic rotation
         
         bgCtx.beginPath();
-        bgCtx.roundRect(-width / 2, -height / 2, width, height, radius);
-        const grad = bgCtx.createRadialGradient(0, 0, 0, 0, 0, width / 2);
-        // Dull red pool
-        grad.addColorStop(0, p.color.replace("0.8", (p.alpha * 0.45).toString()));
-        grad.addColorStop(1, "rgba(255, 0, 0, 0)");
+        const grad = bgCtx.createRadialGradient(0, 0, 0, 0, 0, size * 10);
+        grad.addColorStop(0, p.color.replace("0.8", (p.alpha * 0.4).toString()));
+        grad.addColorStop(1, "rgba(0,0,0,0)");
         bgCtx.fillStyle = grad;
+        bgCtx.arc(0, 0, size * 10, 0, Math.PI * 2);
         bgCtx.fill();
 
-        // Inner soft core
         bgCtx.beginPath();
-        bgCtx.roundRect(-4, -1.5, 8, 3, 1.5);
-        bgCtx.fillStyle = p.color.replace("0.8", (p.alpha * 0.3).toString());
+        bgCtx.arc(0, 0, size * 2, 0, Math.PI * 2);
+        bgCtx.fillStyle = p.color.replace("0.8", (p.alpha * 0.6).toString());
         bgCtx.fill();
         bgCtx.restore();
       });
 
       bgCtx.restore();
 
-      // --- Cursor Layer (Top) ---
       cursorCtx.clearRect(0, 0, w, h);
 
-      // Pulses (Thicker)
       for (let i = pulses.length - 1; i >= 0; i--) {
         const p = pulses[i];
         p.r += p.speed;
@@ -252,7 +225,7 @@ const AIParticlesBackground: React.FC = () => {
           continue;
         }
         cursorCtx.beginPath();
-        cursorCtx.strokeStyle = `rgba(255, 50, 100, ${p.alpha})`;
+        cursorCtx.strokeStyle = `rgba(225, 29, 72, ${p.alpha})`;
         cursorCtx.lineWidth = 4 * p.alpha;
         cursorCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         cursorCtx.stroke();
@@ -262,7 +235,6 @@ const AIParticlesBackground: React.FC = () => {
         const cx = mouseRef.current.x;
         const cy = mouseRef.current.y;
 
-        // Trail (Ghost-like)
         trailRef.current.push({ x: cx, y: cy, t: Date.now() });
         if (trailRef.current.length > 20) trailRef.current.shift();
 
@@ -270,35 +242,32 @@ const AIParticlesBackground: React.FC = () => {
         for (let i = 0; i < trailRef.current.length; i++) {
           const pt = trailRef.current[i];
           const age = Date.now() - pt.t;
-          const alpha = Math.max(0, (1 - age / 800) * 0.15);
-          const size = (i / trailRef.current.length) * 15;
+          const alpha = Math.max(0, (1 - age / 800) * 0.25);
+          const size = (i / trailRef.current.length) * 22;
           
           cursorCtx.beginPath();
           const grad = cursorCtx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, size);
-          grad.addColorStop(0, `rgba(255, 10, 50, ${alpha})`);
+          grad.addColorStop(0, `rgba(225, 29, 72, ${alpha})`);
           grad.addColorStop(1, "rgba(0, 0, 0, 0)");
           cursorCtx.fillStyle = grad;
           cursorCtx.arc(pt.x, pt.y, size, 0, Math.PI * 2);
           cursorCtx.fill();
         }
 
-        // Main Body (Large, Dull, Ring-like)
-        const outerSize = 35 + Math.sin(time * 2) * 5;
+        const outerSize = 52 + Math.sin(time * 2) * 8;
         
-        // Outer soft glow
         const mainGrad = cursorCtx.createRadialGradient(cx, cy, 0, cx, cy, outerSize);
-        mainGrad.addColorStop(0, "rgba(255, 0, 50, 0.15)");
-        mainGrad.addColorStop(1, "rgba(50, 0, 0, 0)");
+        mainGrad.addColorStop(0, "rgba(225, 29, 72, 0.25)");
+        mainGrad.addColorStop(1, "rgba(25, 0, 0, 0)");
         cursorCtx.fillStyle = mainGrad;
         cursorCtx.beginPath();
         cursorCtx.arc(cx, cy, outerSize, 0, Math.PI * 2);
         cursorCtx.fill();
 
-        // Subtle Ring
         cursorCtx.beginPath();
-        cursorCtx.strokeStyle = "rgba(255, 50, 80, 0.25)";
-        cursorCtx.lineWidth = 1.5;
-        cursorCtx.arc(cx, cy, 12, 0, Math.PI * 2);
+        cursorCtx.strokeStyle = "rgba(225, 29, 72, 0.45)";
+        cursorCtx.lineWidth = 2.5;
+        cursorCtx.arc(cx, cy, 18, 0, Math.PI * 2);
         cursorCtx.stroke();
       }
 
