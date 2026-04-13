@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/lib/supabase";
+import Profile from "@/pages/Profile";
 import { 
   ResponsiveContainer, 
   AreaChart, 
@@ -100,7 +101,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-slate-200 selection:bg-primary/30 font-sans">
       {/* Sleek Top Bar */}
-      <nav className="h-16 border-b border-white/5 bg-black/40 backdrop-blur-md sticky top-0 z-50">
+      <nav className="h-16 border-b border-white bg-black/40 backdrop-blur-md sticky top-0 z-50">
         <div className="container h-full flex items-center justify-between px-6">
           <div className="flex items-center gap-3">
             <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(255,140,0,0.4)]">
@@ -110,7 +111,7 @@ const Dashboard = () => {
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center bg-white/5 border border-white/10 rounded-full px-4 py-1.5 gap-3 w-80 group focus-within:border-primary/50 transition-all">
+            <div className="hidden md:flex items-center bg-white/5 border border-white rounded-full px-4 py-1.5 gap-3 w-80 group focus-within:border-primary/50 transition-all">
               <Search className="h-4 w-4 text-slate-500 group-focus-within:text-primary" />
               <input type="text" placeholder="Search data points..." className="bg-transparent border-none text-sm outline-none w-full text-slate-300" />
             </div>
@@ -119,8 +120,8 @@ const Dashboard = () => {
                 <Bell className="h-5 w-5" />
                 <span className="absolute top-2.5 right-2.5 h-1.5 w-1.5 bg-primary rounded-full border-2 border-black" />
               </Button>
-              <div className="h-9 w-9 rounded-full border border-white/10 bg-gradient-to-br from-slate-800 to-black p-0.5">
-                <div className="h-full w-full rounded-full bg-slate-900 border border-white/5 shadow-inner" />
+              <div className="h-9 w-9 rounded-full border border-white bg-gradient-to-br from-slate-800 to-black p-0.5">
+                <div className="h-full w-full rounded-full bg-slate-900 border border-white shadow-inner" />
               </div>
             </div>
           </div>
@@ -129,7 +130,7 @@ const Dashboard = () => {
 
       <div className="flex">
         {/* Sidebar - Minimalist */}
-        <aside className="hidden lg:flex w-72 flex-col border-r border-white/5 h-[calc(100vh-64px)] sticky top-16 p-6 gap-8 bg-black/20">
+        <aside className="hidden lg:flex w-72 flex-col border-r border-white h-[calc(100vh-64px)] sticky top-16 p-6 gap-8 bg-black/20">
           <div className="space-y-6">
             <div>
               <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Master Console</p>
@@ -150,8 +151,8 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="mt-auto pt-6 border-t border-white/5 space-y-1">
-            <NavButton icon={<Settings />} label="Preferences" onClick={() => setActiveTab("settings")} />
+          <div className="mt-auto pt-6 border-t border-white space-y-1">
+            <NavButton icon={<Settings />} label="Profile" onClick={() => setActiveTab("profile")} />
             <button 
               onClick={handleLogout}
               className="group flex w-full items-center gap-3 px-4 py-3 text-sm font-medium text-slate-500 hover:text-primary transition-all rounded-xl hover:bg-primary/5"
@@ -178,7 +179,7 @@ const Dashboard = () => {
                 <p className="text-slate-400 font-medium">System status optimal. 3 study cycles queued.</p>
               </div>
               <div className="flex items-center gap-4">
-                <Button variant="outline" className="border-white/10 bg-white/5 text-slate-300 hover:bg-white/10">
+                <Button variant="outline" className="border-white bg-white/5 text-slate-300 hover:bg-white/10">
                   <Filter className="h-4 w-4 mr-2" /> View Logs
                 </Button>
                 <Button className="bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 transition-all font-bold px-6">
@@ -190,8 +191,8 @@ const Dashboard = () => {
             {activeTab === "overview" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
                 {/* Visual Data Card */}
-                <Card className="lg:col-span-2 bg-[#0a0a0a] border-white/5 overflow-hidden shadow-2xl">
-                  <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 pb-4">
+                <Card className="lg:col-span-2 bg-[#0a0a0a] border-white overflow-hidden shadow-2xl">
+                  <CardHeader className="flex flex-row items-center justify-between border-b border-white pb-4">
                     <div>
                       <CardTitle className="text-lg text-white">Efficiency Index</CardTitle>
                       <CardDescription className="text-slate-500">Weekly performance variance</CardDescription>
@@ -223,7 +224,7 @@ const Dashboard = () => {
 
                 {/* Vertical Stat Stack */}
                 <div className="space-y-6">
-                   <Card className="bg-[#0a0a0a] border-white/5 border-l-4 border-l-primary shadow-xl">
+                   <Card className="bg-[#0a0a0a] border-white border-l-4 border-l-primary shadow-xl">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-slate-500 font-bold text-[10px] tracking-widest uppercase text-white/50">Core Status</span>
@@ -236,7 +237,7 @@ const Dashboard = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-primary/5 border-white/5 shadow-xl relative overflow-hidden group">
+                  <Card className="bg-primary/5 border-white shadow-xl relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform">
                       <Brain className="h-20 w-20 text-primary" />
                     </div>
@@ -254,7 +255,7 @@ const Dashboard = () => {
 
                 {/* Progress Indicators */}
                 {subjectProgress.map((sub, i) => (
-                  <Card key={i} className="bg-[#0a0a0a] border-white/5 hover:border-primary/20 transition-all group">
+                  <Card key={i} className="bg-[#0a0a0a] border-white hover:border-primary/20 transition-all group">
                     <CardContent className="p-6 space-y-6">
                       <div className="flex justify-between items-start">
                         <div>
@@ -283,24 +284,24 @@ const Dashboard = () => {
             {/* Timetable View Placeholder */}
             {activeTab === "timetable" && (
               <div className="animate-in fade-in slide-in-from-right-4 duration-500 overflow-x-auto pb-4">
-                <Card className="bg-[#0a0a0a] border-white/5 min-w-[800px]">
-                  <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 p-6">
+                <Card className="bg-[#0a0a0a] border-white min-w-[800px]">
+                  <CardHeader className="flex flex-row items-center justify-between border-b border-white p-6">
                     <div>
                       <CardTitle className="text-white">Master Schedule</CardTitle>
                       <CardDescription>April 12 — April 18, 2026</CardDescription>
                     </div>
                     <div className="flex gap-2">
                        <Button variant="ghost" size="sm" className="text-xs text-slate-500">PREV</Button>
-                       <Button variant="outline" size="sm" className="text-xs border-white/10">NEXT</Button>
+                       <Button variant="outline" size="sm" className="text-xs border-white">NEXT</Button>
                     </div>
                   </CardHeader>
                   <CardContent className="p-0">
                     <div className="grid grid-cols-[80px_repeat(7,1fr)]">
                       {/* Empty corner */}
-                      <div className="border-r border-b border-white/5 p-4" />
+                      <div className="border-r border-b border-white p-4" />
                       {/* Days Header */}
                       {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day, i) => (
-                        <div key={day} className="border-r border-b border-white/5 p-4 text-center">
+                        <div key={day} className="border-r border-b border-white p-4 text-center">
                           <span className="text-[10px] font-black text-slate-600 tracking-widest">{day}</span>
                           <div className={`mt-1 text-sm font-bold ${i === 0 ? "text-primary" : "text-white"}`}>{12 + i}</div>
                         </div>
@@ -317,7 +318,7 @@ const Dashboard = () => {
                         { time: '21:00', label: '09 PM' }
                       ].map((slot, rowIndex) => (
                         <React.Fragment key={slot.time}>
-                          <div className="border-r border-b border-white/5 p-4 text-[10px] font-bold text-slate-600 flex items-center justify-center">
+                          <div className="border-r border-b border-white p-4 text-[10px] font-bold text-slate-600 flex items-center justify-center">
                             {slot.label}
                           </div>
                           {[0, 1, 2, 3, 4, 5, 6].map((colIndex) => {
@@ -327,7 +328,7 @@ const Dashboard = () => {
                             const isPhysics = (rowIndex + colIndex) % 5 === 0;
                             
                             return (
-                              <div key={colIndex} className="border-r border-b border-white/5 p-1 relative h-20 group">
+                              <div key={colIndex} className="border-r border-b border-white p-1 relative h-20 group">
                                 {isMath && (
                                   <div className="absolute inset-1 rounded-md bg-primary/10 border-l-2 border-primary p-2 overflow-hidden hover:bg-primary/20 transition-colors cursor-pointer ring-1 ring-primary/20">
                                     <p className="text-[9px] font-black text-primary uppercase leading-tight">MATH_ANALYSIS</p>
@@ -341,7 +342,7 @@ const Dashboard = () => {
                                   </div>
                                 )}
                                 {!isMath && !isPhysics && isBusy && ( rowIndex > 2 ) && (
-                                  <div className="absolute inset-1 rounded-md bg-white/5 border-l-2 border-white/20 p-2 opacity-30">
+                                  <div className="absolute inset-1 rounded-md bg-white/5 border-l-2 border-white p-2 opacity-30">
                                     <p className="text-[8px] font-bold text-slate-600 uppercase">Buffer</p>
                                   </div>
                                 )}
@@ -525,34 +526,9 @@ const Dashboard = () => {
               </div>
             )}
 
-            {activeTab === "settings" && (
-              <div className="max-w-2xl space-y-10 animate-in fade-in duration-500">
-                <h2 className="text-3xl font-black text-white mb-10">CONTROL_CENTER</h2>
-                <div className="space-y-1.5 p-6 rounded-2xl border border-white/5 bg-[#0a0a0a]">
-                   <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Account Interface</p>
-                   <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-slate-900 flex items-center justify-center p-0.5 shadow-xl">
-                          <div className="h-full w-full rounded-2xl bg-black border border-white/10" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-white text-lg">{userName}</p>
-                          <p className="text-xs text-slate-500 font-mono italic">UID: SM-09412-X</p>
-                        </div>
-                      </div>
-                      <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10">Manage</Button>
-                   </div>
-                </div>
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between p-4 border-b border-white/5">
-                    <span className="text-slate-400 font-medium">Dark Mode Intensity</span>
-                    <span className="text-primary font-bold">LEGACY_BLACK</span>
-                  </div>
-                  <div className="flex items-center justify-between p-4 border-b border-white/5">
-                    <span className="text-slate-400 font-medium">AI Feedback Interval</span>
-                    <span className="text-white font-bold">15 MIN</span>
-                  </div>
-                </div>
+            {activeTab === "profile" && (
+              <div className="animate-in fade-in duration-300 min-h-[60vh] flex items-center justify-center">
+                <Profile />
               </div>
             )}
           </div>
