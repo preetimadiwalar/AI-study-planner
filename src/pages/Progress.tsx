@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, CheckCircle2, Clock } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import DashboardNavBar from "@/components/DashboardNavBar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress as ProgressBar } from "@/components/ui/progress";
@@ -15,6 +16,7 @@ const subjects = [
 const ProgressPage = () => (
   <div className="min-h-screen flex flex-col">
     <Navbar />
+    <DashboardNavBar />
     <main className="flex-1 py-10">
       <div className="container">
         <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary mb-6">

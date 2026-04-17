@@ -25,6 +25,7 @@ import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/lib/supabase";
 import Profile from "@/pages/Profile";
 import SubjectsSection from "@/components/SubjectsSection";
+import DashboardNavBar from "@/components/DashboardNavBar";
 import { 
   ResponsiveContainer, 
   AreaChart, 
@@ -129,6 +130,7 @@ const Dashboard = () => {
         </div>
       </nav>
 
+      <DashboardNavBar />
       <div className="flex">
         {/* Sidebar - Minimalist */}
         <aside className="hidden lg:flex w-72 flex-col border-r border-white h-[calc(100vh-64px)] sticky top-16 p-6 gap-8 bg-black/20">
