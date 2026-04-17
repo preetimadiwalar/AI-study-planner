@@ -7,6 +7,10 @@ import AIParticlesBackground from "./components/AIParticlesBackground";
 import Index from "./pages/Index.tsx";
 import ProgressPage from "./pages/Progress.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import Subjects from "./pages/Subjects.tsx";
+import Planner from "./pages/Planner.tsx";
+import Notifications from "./pages/Notifications.tsx";
+import Profile from "./pages/Profile.tsx";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -23,7 +27,11 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/subjects" element={<Subjects />} />
+          <Route path="/planner" element={<Planner />} />
           <Route path="/progress" element={<ProgressPage />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
