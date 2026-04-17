@@ -54,7 +54,7 @@ const AboutSection = () => (
                <span className="text-primary font-bold text-lg">//</span>
                <span className="text-primary font-bold text-xs tracking-[0.3em] uppercase">What is AI Study Planner</span>
             </div>
-            <h2 className="font-heading text-3xl md:text-5xl lg:text-5xl font-bold text-white leading-tight tracking-tight">
+            <h2 className="font-heading text-3xl md:text-5xl lg:text-5xl font-bold text-fg leading-tight tracking-tight">
               Where Study <span className="text-primary">Evolves.</span>
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed max-w-lg font-light">
@@ -63,9 +63,9 @@ const AboutSection = () => (
           </div>
 
           {/* Stats Grid 2x2 */}
-          <div className="grid grid-cols-2 gap-4 pt-8">
+            <div className="grid grid-cols-2 gap-4 pt-8">
             {stats.map((s) => (
-              <div key={s.label} className="border border-white/5 bg-white/[0.02] p-6 group hover:border-primary/50 transition-all duration-300">
+              <div key={s.label} className="border border-ui bg-popover p-6 group hover:border-primary/50 transition-all duration-300">
                 <p className="text-4xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform origin-left">{s.value}</p>
                 <p className="text-[10px] font-bold text-muted-foreground tracking-[0.2em]">{s.label}</p>
               </div>
@@ -82,12 +82,12 @@ const AboutSection = () => (
                 {features.map((f, i) => (
                     <div key={f.title} className="flex gap-6 group">
                         <div className="flex-shrink-0 pt-1">
-                            <div className="w-10 h-10 border border-white/10 flex items-center justify-center group-hover:border-primary/50 group-hover:text-primary transition-all duration-300">
-                                <f.icon className="w-5 h-5 text-white group-hover:text-primary transition-colors" />
+                            <div className="w-10 h-10 border border-ui flex items-center justify-center group-hover:border-primary/50 group-hover:text-primary transition-all duration-300">
+                              <f.icon className="w-5 h-5 text-fg group-hover:text-primary transition-colors" />
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <h4 className="text-sm font-bold text-white tracking-widest uppercase">{f.title}</h4>
+                            <h4 className="text-sm font-bold text-fg tracking-widest uppercase">{f.title}</h4>
                             <p className="text-sm text-muted-foreground leading-relaxed max-w-md font-light">
                                 {f.desc}
                             </p>

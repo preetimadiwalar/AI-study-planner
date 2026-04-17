@@ -32,27 +32,11 @@ type Flare = {
 
 const AIParticlesBackground: React.FC = () => {
   const bgCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const cursorCanvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  const mouseRef = useRef({
-    x: -1000,
-    y: -1000,
-    active: false,
-    clicking: false,
-    lerpX: -1000,
-    lerpY: -1000
-  });
-
-  const trailRef = useRef<Array<{ x: number, y: number, t: number }>>([]);
 
   useEffect(() => {
     const bgCanvas = bgCanvasRef.current;
-    const cursorCanvas = cursorCanvasRef.current;
-    if (!bgCanvas || !cursorCanvas) return;
-
     const bgCtx = bgCanvas.getContext("2d", { alpha: false });
-    const cursorCtx = cursorCanvas.getContext("2d");
-    if (!bgCtx || !cursorCtx) return;
+    if (!bgCtx) return;
 
     let w = window.innerWidth;
     let h = window.innerHeight;
@@ -63,13 +47,9 @@ const AIParticlesBackground: React.FC = () => {
       h = window.innerHeight;
       dpr = window.devicePixelRatio || 1;
 
-      [bgCanvas, cursorCanvas].forEach(c => {
-        c.width = w * dpr;
-        c.height = h * dpr;
-      });
-
+      bgCanvas.width = w * dpr;
+      bgCanvas.height = h * dpr;
       bgCtx.scale(dpr, dpr);
-      cursorCtx.scale(dpr, dpr);
     };
 
     resize();
@@ -77,7 +57,6 @@ const AIParticlesBackground: React.FC = () => {
 
     // Initial state
     const sparks: Spark[] = [];
-    const pulses: Pulse[] = [];
     const flares: Flare[] = [];
 
     const colors = [
@@ -101,17 +80,6 @@ const AIParticlesBackground: React.FC = () => {
       });
     }
 
-    const spawnPulse = (x?: number, y?: number) => {
-      pulses.push({
-        x: x ?? Math.random() * w,
-        y: y ?? Math.random() * h,
-        r: 0,
-        maxR: Math.random() * 500 + 300,
-        alpha: 0.6,
-        speed: 4 + Math.random() * 4
-      });
-    };
-
     const spawnFlare = () => {
       flares.push({
         x: Math.random() * w,
@@ -131,25 +99,20 @@ const AIParticlesBackground: React.FC = () => {
       lastTime = now;
       time += 0.012;
 
-      bgCtx.fillStyle = "#000000";
+      // fill with current theme background (uses CSS var --background)
+      try {
+        const bgVar = getComputedStyle(document.documentElement).getPropertyValue('--background')?.trim();
+        if (bgVar) bgCtx.fillStyle = `hsl(${bgVar})`;
+        else bgCtx.fillStyle = "#000000";
+      } catch (e) {
+        bgCtx.fillStyle = "#000000";
+      }
       bgCtx.fillRect(0, 0, w, h);
 
-      const mx = mouseRef.current.x;
-      const my = mouseRef.current.y;
-
-      if (mouseRef.current.lerpX === -1000) {
-        mouseRef.current.lerpX = mx;
-        mouseRef.current.lerpY = my;
-      } else {
-        mouseRef.current.lerpX += (mx - mouseRef.current.lerpX) * 0.08;
-        mouseRef.current.lerpY += (my - mouseRef.current.lerpY) * 0.08;
-      }
-
-      const lmx = mouseRef.current.lerpX;
-      const lmy = mouseRef.current.lerpY;
-      const parallaxX = (lmx - w / 2) * 0.06;
-      const parallaxY = (lmy - h / 2) * 0.06;
-      const zoom = 1 + (mx !== -1000 ? 0.05 : 0);
+      // No cursor interaction: keep static parallax/zoom
+      const parallaxX = 0;
+      const parallaxY = 0;
+      const zoom = 1;
 
       bgCtx.save();
       bgCtx.translate(w / 2, h / 2);
@@ -214,92 +177,16 @@ const AIParticlesBackground: React.FC = () => {
 
       bgCtx.restore();
 
-      cursorCtx.clearRect(0, 0, w, h);
-
-      for (let i = pulses.length - 1; i >= 0; i--) {
-        const p = pulses[i];
-        p.r += p.speed;
-        p.alpha -= 0.008;
-        if (p.alpha <= 0 || p.r >= p.maxR) {
-          pulses.splice(i, 1);
-          continue;
-        }
-        cursorCtx.beginPath();
-        cursorCtx.strokeStyle = `rgba(225, 29, 72, ${p.alpha})`;
-        cursorCtx.lineWidth = 4 * p.alpha;
-        cursorCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        cursorCtx.stroke();
-      }
-
-      if (mouseRef.current.active) {
-        const cx = mouseRef.current.x;
-        const cy = mouseRef.current.y;
-
-        trailRef.current.push({ x: cx, y: cy, t: Date.now() });
-        if (trailRef.current.length > 20) trailRef.current.shift();
-
-        cursorCtx.globalCompositeOperation = "lighter";
-        for (let i = 0; i < trailRef.current.length; i++) {
-          const pt = trailRef.current[i];
-          const age = Date.now() - pt.t;
-          const alpha = Math.max(0, (1 - age / 800) * 0.25);
-          const size = (i / trailRef.current.length) * 22;
-          
-          cursorCtx.beginPath();
-          const grad = cursorCtx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, size);
-          grad.addColorStop(0, `rgba(225, 29, 72, ${alpha})`);
-          grad.addColorStop(1, "rgba(0, 0, 0, 0)");
-          cursorCtx.fillStyle = grad;
-          cursorCtx.arc(pt.x, pt.y, size, 0, Math.PI * 2);
-          cursorCtx.fill();
-        }
-
-        const outerSize = 52 + Math.sin(time * 2) * 8;
-        
-        const mainGrad = cursorCtx.createRadialGradient(cx, cy, 0, cx, cy, outerSize);
-        mainGrad.addColorStop(0, "rgba(225, 29, 72, 0.25)");
-        mainGrad.addColorStop(1, "rgba(25, 0, 0, 0)");
-        cursorCtx.fillStyle = mainGrad;
-        cursorCtx.beginPath();
-        cursorCtx.arc(cx, cy, outerSize, 0, Math.PI * 2);
-        cursorCtx.fill();
-
-        cursorCtx.beginPath();
-        cursorCtx.strokeStyle = "rgba(225, 29, 72, 0.45)";
-        cursorCtx.lineWidth = 2.5;
-        cursorCtx.arc(cx, cy, 18, 0, Math.PI * 2);
-        cursorCtx.stroke();
-      }
-
       requestAnimationFrame(animate);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current.x = e.clientX;
-      mouseRef.current.y = e.clientY;
-      mouseRef.current.active = true;
-    };
-
-    const handleMouseDown = (e: MouseEvent) => {
-      spawnPulse(e.clientX, e.clientY);
-      mouseRef.current.clicking = true;
-    };
-
-    const handleMouseUp = () => {
-      mouseRef.current.clicking = false;
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
+    // no cursor drawing: do not attach mouse listeners
 
     const raf = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
+      // no cursor listeners to remove
       cancelAnimationFrame(raf);
     };
   }, []);
@@ -317,22 +204,10 @@ const AIParticlesBackground: React.FC = () => {
           height: "100%",
           zIndex: -1,
           pointerEvents: "none",
-          background: "#000",
+          background: "hsl(var(--background))",
         }}
       />
-      <canvas
-        ref={cursorCanvasRef}
-        id="cursor-canvas"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: 9999,
-          pointerEvents: "none",
-        }}
-      />
+      {/* cursor canvas removed to keep cursor normal */}
     </>
   );
 };

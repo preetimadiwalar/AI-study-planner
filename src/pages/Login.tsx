@@ -99,7 +99,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-black selection:bg-primary/30 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p-4 selection:bg-primary/30 relative overflow-hidden" style={{ background: 'hsl(var(--background))', color: 'hsl(var(--foreground))' }}>
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
       </div>
 
@@ -134,7 +134,7 @@ const Login = () => {
                       <Input 
                         id="name" 
                         placeholder="John Doe" 
-                        className="bg-white/5 border-white/10 focus:border-primary/50"
+                        className="bg-popover border-ui focus:border-primary/50"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
@@ -145,7 +145,7 @@ const Login = () => {
                       <Input 
                         id="phone" 
                         placeholder="+1 (555) 000-0000" 
-                        className="bg-white/5 border-white/10 focus:border-primary/50"
+                        className="bg-popover border-ui focus:border-primary/50"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         required
@@ -156,7 +156,7 @@ const Login = () => {
                       <Input 
                         id="college" 
                         placeholder="University Name" 
-                        className="bg-white/5 border-white/10 focus:border-primary/50"
+                        className="bg-popover border-ui focus:border-primary/50"
                         value={college}
                         onChange={(e) => setCollege(e.target.value)}
                         required
@@ -167,7 +167,7 @@ const Login = () => {
                       <Input 
                         id="dept" 
                         placeholder="e.g., CS, IS" 
-                        className="bg-white/5 border-white/10 focus:border-primary/50"
+                        className="bg-popover border-ui focus:border-primary/50"
                         value={department}
                         onChange={(e) => setDepartment(e.target.value)}
                         required
@@ -176,10 +176,10 @@ const Login = () => {
                     <div className="space-y-1.5">
                       <Label htmlFor="program" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Select Program</Label>
                       <Select onValueChange={setProgram} value={program}>
-                        <SelectTrigger className="w-full bg-white/5 border-white/10 focus:border-primary/50">
+                        <SelectTrigger className="w-full bg-popover border-ui focus:border-primary/50">
                           <SelectValue placeholder="Select Program" />
                         </SelectTrigger>
-                        <SelectContent className="bg-neutral-900 border-white/10 text-foreground">
+                        <SelectContent className="bg-popover border-ui text-fg">
                           <SelectItem value="BE/B.Tech">BE/B.Tech</SelectItem>
                           <SelectItem value="M.Tech">M.Tech</SelectItem>
                           <SelectItem value="BCA">BCA</SelectItem>
@@ -198,10 +198,10 @@ const Login = () => {
                     <div className="space-y-1.5">
                       <Label htmlFor="semester" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Select Semester</Label>
                       <Select onValueChange={setSemester} value={semester}>
-                        <SelectTrigger className="w-full bg-white/5 border-white/10 focus:border-primary/50">
+                        <SelectTrigger className="w-full bg-popover border-ui focus:border-primary/50">
                           <SelectValue placeholder="Select Semester" />
                         </SelectTrigger>
-                        <SelectContent className="bg-neutral-900 border-white/10 text-foreground">
+                        <SelectContent className="bg-popover border-ui text-fg">
                           {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                             <SelectItem key={num} value={`Sem ${num}`}>
                               Sem {num}
@@ -213,10 +213,10 @@ const Login = () => {
                   </div>
                     <div className="space-y-1">
                     <Label htmlFor="roll" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">USN / Roll Number</Label>
-                    <Input 
-                      id="roll" 
-                      placeholder="USN / Roll Number" 
-                      className="bg-white/5 border-white/10 focus:border-primary/50"
+                      <Input 
+                        id="roll" 
+                        placeholder="USN / Roll Number" 
+                        className="bg-popover border-ui focus:border-primary/50"
                       value={rollNumber}
                       onChange={(e) => setRollNumber(e.target.value)}
                       required
@@ -224,11 +224,11 @@ const Login = () => {
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Email Address</Label>
-                    <Input 
+                      <Input 
                       id="email" 
                       type="email" 
                       placeholder="you@example.com" 
-                      className="bg-white/5 border-white/10 focus:border-primary/50"
+                      className="bg-popover border-ui focus:border-primary/50"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       autoComplete="off"
@@ -242,7 +242,7 @@ const Login = () => {
                         id="password" 
                         type={showPassword ? "text" : "password"} 
                         placeholder="••••••••" 
-                        className="bg-white/5 border-white/10 focus:border-primary/50"
+                        className="bg-popover border-ui focus:border-primary/50"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         autoComplete="new-password"
@@ -262,11 +262,11 @@ const Login = () => {
                 <>
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Email</Label>
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      placeholder="you@example.com" 
-                      className="bg-white/5 border-white/10 focus:border-primary/50 h-11"
+                      <Input 
+                        id="email" 
+                        type="email" 
+                        placeholder="you@example.com" 
+                        className="bg-popover border-ui focus:border-primary/50 h-11"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       autoComplete="off"
@@ -283,7 +283,7 @@ const Login = () => {
                         id="password" 
                         type={showPassword ? "text" : "password"} 
                         placeholder="••••••••" 
-                        className="bg-white/5 border-white/10 focus:border-primary/50 h-11"
+                        className="bg-popover border-ui focus:border-primary/50 h-11"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         autoComplete="current-password"
@@ -302,7 +302,7 @@ const Login = () => {
               )}
             </CardContent>
               <CardFooter className={`flex flex-col gap-3 ${isSignup ? "pt-2" : "pt-4"}`}>
-                <Button type="submit" className="w-full h-11 text-base font-bold shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)] transition-all bg-primary hover:bg-primary/90 text-white" size="lg" disabled={loading}>
+                <Button type="submit" className="w-full h-11 text-base font-bold shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)] transition-all bg-primary hover:bg-primary/90 text-primary-foreground" size="lg" disabled={loading}>
                   {loading ? (
                     <span className="flex items-center gap-2">
                       <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />

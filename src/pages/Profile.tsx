@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
+
 import {
   Select,
   SelectContent,
@@ -13,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import DashboardNavBar from "@/components/DashboardNavBar";
+// DashboardNavBar removed - using single top navbar
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -88,25 +89,26 @@ const Profile = () => {
   };
 
   if (loading && !profile) {
-    return <div className="text-slate-400">Loading profile...</div>;
+    return <div className="text-muted-foreground">Loading profile...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-slate-200">
-      <DashboardNavBar />
-      <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in duration-300 py-10">
-        <h2 className="text-3xl font-black text-white text-center">Profile</h2>
+    <div className="space-y-6 animate-in fade-in duration-300">
+      <div>
+        <h1 className="text-4xl font-black tracking-tight text-[hsl(var(--foreground))]">Profile</h1>
+        <p className="text-muted-foreground mt-1">Your public and academic details</p>
+      </div>
 
-        <Card className="bg-[#0a0a0a] border-white w-full">
+        <Card className="w-full" style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
           <CardHeader className="p-6">
-            <CardTitle className="text-lg text-white">Account</CardTitle>
-            <CardDescription className="text-slate-500">Your public and academic details</CardDescription>
+            <CardTitle className="text-lg text-fg">Account</CardTitle>
+            <CardDescription className="text-muted-foreground">Your public and academic details</CardDescription>
           </CardHeader>
           <CardContent className="p-6 grid grid-cols-1 gap-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-white font-bold text-lg">{profile?.full_name}</p>
-                <p className="text-slate-400 text-sm">{profile?.college_name}</p>
+                <p className="font-bold text-lg text-fg">{profile?.full_name}</p>
+                <p className="text-muted-foreground text-sm">{profile?.college_name}</p>
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" onClick={() => { setEditing(!editing); }} className="bg-amber-400/10 text-amber-300 border border-amber-300/20 hover:bg-amber-400/20">{editing ? "Cancel" : "Edit"}</Button>
@@ -119,34 +121,34 @@ const Profile = () => {
             {/* Clean form: show only signup-provided fields; email is read-only */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <Label className="text-xs text-slate-400">Full name</Label>
-                <Input className="border border-white" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} disabled={!editing} />
+                <Label className="text-xs text-muted-foreground">Full name</Label>
+                <Input className="border border-ui bg-popover text-fg" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} disabled={!editing} />
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs text-slate-400">Email</Label>
-                <Input className="border border-white" value={form.email} disabled />
+                <Label className="text-xs text-muted-foreground">Email</Label>
+                <Input className="border border-ui bg-popover text-fg" value={form.email} disabled />
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs text-slate-400">Phone</Label>
-                <Input className="border border-white" value={form.phone_number} onChange={(e) => setForm({ ...form, phone_number: e.target.value })} disabled={!editing} />
+                <Label className="text-xs text-muted-foreground">Phone</Label>
+                <Input className="border border-ui bg-popover text-fg" value={form.phone_number} onChange={(e) => setForm({ ...form, phone_number: e.target.value })} disabled={!editing} />
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs text-slate-400">Roll / USN</Label>
-                <Input className="border border-white" value={form.roll_number} onChange={(e) => setForm({ ...form, roll_number: e.target.value })} disabled={!editing} />
+                <Label className="text-xs text-muted-foreground">Roll / USN</Label>
+                <Input className="border border-ui bg-popover text-fg" value={form.roll_number} onChange={(e) => setForm({ ...form, roll_number: e.target.value })} disabled={!editing} />
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs text-slate-400">Department</Label>
-                <Input className="border border-white" value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} disabled={!editing} />
+                <Label className="text-xs text-muted-foreground">Department</Label>
+                <Input className="border border-ui bg-popover text-fg" value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} disabled={!editing} />
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs text-slate-400">Program</Label>
+                <Label className="text-xs text-muted-foreground">Program</Label>
                 <Select onValueChange={(v) => setForm({ ...form, program: v })} value={form.program}>
-                  <SelectTrigger className="w-full border border-white" disabled={!editing}>
+                  <SelectTrigger className="w-full border border-ui bg-popover text-fg" disabled={!editing}>
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
@@ -167,9 +169,9 @@ const Profile = () => {
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs text-slate-400">Semester</Label>
+                <Label className="text-xs text-muted-foreground">Semester</Label>
                 <Select onValueChange={(v) => setForm({ ...form, semester: v })} value={form.semester}>
-                  <SelectTrigger className="w-full border border-white" disabled={!editing}>
+                  <SelectTrigger className="w-full border border-ui bg-popover text-fg" disabled={!editing}>
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
@@ -181,15 +183,14 @@ const Profile = () => {
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs text-slate-400">College</Label>
-                <Input className="border border-white" value={form.college_name} onChange={(e) => setForm({ ...form, college_name: e.target.value })} disabled={!editing} />
+                <Label className="text-xs text-muted-foreground">College</Label>
+                <Input className="border border-ui bg-popover text-fg" value={form.college_name} onChange={(e) => setForm({ ...form, college_name: e.target.value })} disabled={!editing} />
               </div>
             </div>
 
 
           </CardContent>
         </Card>
-      </div>
     </div>
   );
 };

@@ -16,7 +16,7 @@ const HeroSection = () => (
                <span className="text-primary font-bold text-lg">//</span>
                <span className="text-primary font-bold text-xs tracking-[0.4em] uppercase text-primary/80">Intelligence Deployed</span>
             </div>
-            <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight text-white uppercase max-w-4xl">
+            <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight text-fg uppercase max-w-4xl">
                 AI Study <span className="text-primary drop-shadow-[0_0_20px_rgba(233,30,99,0.5)]">Learning.</span>
               </h1>
               <p className="max-w-xl text-xl md:text-2xl text-muted-foreground font-light leading-relaxed">
@@ -24,7 +24,7 @@ const HeroSection = () => (
                 Stop guessing, start executing your tactical roadmap.
               </p>
               <div className="mt-4">
-                <Button size="lg" className="h-16 px-12 text-lg font-bold uppercase tracking-widest shadow-[0_0_30px_rgba(233,30,99,0.4)] hover:shadow-[0_0_60px_rgba(233,30,99,0.6)] transition-all bg-primary hover:bg-primary/90 text-white rounded-full border-0" asChild>
+                <Button size="lg" className="h-16 px-12 text-lg font-bold uppercase tracking-widest shadow-[0_0_30px_rgba(233,30,99,0.4)] hover:shadow-[0_0_60px_rgba(233,30,99,0.6)] transition-all bg-primary hover:bg-primary/90 text-primary-foreground rounded-full border-0" asChild>
                   <Link to="/login">Initialize Planner Scan</Link>
                 </Button>
               </div>
