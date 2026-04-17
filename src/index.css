@@ -53,18 +53,29 @@
     --sidebar-accent-foreground: 346 84% 70%;
     --sidebar-border: 240 5% 10%;
     --sidebar-ring: 346 84% 30%;
+    --overlay: 0 0% 0% / 0.5;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
-    cursor: none !important;
+    cursor: auto;
+  }
+
+  /* Ensure interactive elements show pointer cursor */
+  a,
+  button,
+  input[type="button"],
+  input[type="submit"],
+  [role="button"] {
+    cursor: pointer;
   }
 
   body {
-    background: #000;
-    @apply text-foreground font-body antialiased;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    @apply font-body antialiased;
     overflow-x: hidden;
   }
 
@@ -72,6 +83,36 @@
     font-family: var(--font-heading);
     @apply tracking-tight font-bold;
   }
+}
+
+/* Theme utility classes (map to CSS variables) */
+.bg-card { background: hsl(var(--card)); }
+.bg-popover { background: hsl(var(--popover)); }
+.bg-sidebar { background: hsl(var(--sidebar-background)); }
+.text-fg { color: hsl(var(--foreground)); }
+.border-ui { border-color: hsl(var(--border)); }
+.text-primary-foreground { color: hsl(var(--primary-foreground)); }
+.text-muted-foreground { color: hsl(var(--muted-foreground)); }
+
+
+/* Light theme overrides */
+.light {
+  --background: 0 0% 100%;
+  --foreground: 220 10% 12%;
+
+  --card: 0 0% 98% / 1;
+  --card-foreground: 220 10% 12%;
+
+  --popover: 0 0% 98% / 1;
+  --popover-foreground: 220 10% 12%;
+
+  --muted: 220 10% 95% / 0.6;
+  --muted-foreground: 220 10% 40%;
+
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 220 10% 12%;
+  --sidebar-border: 220 10% 90%;
+  --overlay: 0 0% 100% / 0.5;
 }
 
 /* Glassmorphism Classes */
@@ -86,6 +127,9 @@
 .neo-glow-text {
   text-shadow: 0 0 10px rgba(225, 29, 72, 0.4), 0 0 20px rgba(225, 29, 72, 0.2);
 }
+
+/* Overlay/backdrop utility to respect theme */
+.bg-overlay { background: hsl(var(--overlay)); }
 
 .neon-border {
   border: 1px solid rgba(225, 29, 72, 0.4);

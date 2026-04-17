@@ -2,7 +2,7 @@ import React from "react";
 
 const TechnicalDashboard = () => {
   return (
-    <div className="relative w-full aspect-[4/3] bg-black/40 border border-primary/20 rounded-xl overflow-hidden p-6 font-mono text-[10px] text-primary/80">
+    <div className="relative w-full aspect-[4/3] border rounded-xl overflow-hidden p-6 font-mono text-[10px] text-primary/80" style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
       {/* Background Grid */}
       <div 
         className="absolute inset-0 opacity-10" 

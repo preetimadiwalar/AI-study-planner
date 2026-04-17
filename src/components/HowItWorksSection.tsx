@@ -12,7 +12,7 @@ const HowItWorksSection = () => (
            <span className="text-primary font-bold text-lg">//</span>
            <span className="text-primary font-bold text-xs tracking-[0.3em] uppercase">The Process</span>
         </div>
-        <h2 className="font-heading text-3xl md:text-5xl font-bold text-white tracking-tight">
+        <h2 className="font-heading text-3xl md:text-5xl font-bold text-fg tracking-tight">
           How It <span className="text-primary">Works.</span>
         </h2>
         <p className="mt-4 text-muted-foreground text-lg font-light max-w-2xl mx-auto">
@@ -24,7 +24,7 @@ const HowItWorksSection = () => (
         {steps.map((step, i) => (
           <div
             key={step.number}
-            className="group relative rounded-2xl border-2 border-white/5 bg-white/[0.02] p-10 transition-all duration-500 hover:border-primary/50 hover:bg-primary/[0.05] overflow-hidden"
+            className="group relative rounded-2xl border-2 border-ui bg-popover p-10 transition-all duration-500 hover:border-primary/50 hover:bg-primary/[0.05] overflow-hidden"
           >
             {/* Architectural Background Number */}
             <span className="absolute -top-6 -right-4 font-heading text-9xl font-black text-primary/5 group-hover:text-primary/10 transition-colors pointer-events-none select-none">
@@ -35,7 +35,7 @@ const HowItWorksSection = () => (
                 <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-primary/30 bg-primary/5 text-primary font-heading text-2xl font-black shadow-[0_0_15px_rgba(255,0,0,0.2)] group-hover:bg-primary group-hover:text-black transition-all duration-300">
                     {step.number}
                 </div>
-                <h3 className="mb-4 font-heading text-xl font-bold text-white uppercase tracking-tight">{step.title}</h3>
+                <h3 className="mb-4 font-heading text-xl font-bold text-fg uppercase tracking-tight">{step.title}</h3>
                 <p className="text-base text-muted-foreground leading-relaxed font-light">{step.desc}</p>
             </div>
 

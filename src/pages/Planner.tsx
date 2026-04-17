@@ -1,10 +1,11 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
-import DashboardNavBar from "@/components/DashboardNavBar";
+import React, { useEffect, useMemo, useState } from "react";
+// DashboardNavBar removed - single top navbar in layout
 import { Card, CardContent, CardHeader, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { CalendarDays, Clock4, Sparkle, Edit3, ListChecks } from "lucide-react";
+
+import { CalendarDays, Clock4, Sparkle, Edit3, Target, ArrowRight } from "lucide-react";
 
 const difficultyOptions = ["Easy", "Medium", "Hard"] as const;
 const allTimeSlots = ["08:00", "09:30", "11:00", "13:00", "14:30", "15:30", "16:00", "17:30"];
@@ -74,6 +75,9 @@ const sortSubjectsByPriority = (subjects: SubjectInput[]) =>
     const scoreB = difficultyWeight(b.difficulty) * (1 + 7 / calculateDaysUntil(b.examDate));
     return scoreB - scoreA;
   });
+
+const calculatePriorityScore = (subject: SubjectInput) =>
+  difficultyWeight(subject.difficulty) * (1 + 7 / calculateDaysUntil(subject.examDate));
 
 const pickSlot = (existingTimes: string[], difficulty: Difficulty) => {
   const ordered =
@@ -154,14 +158,9 @@ const plannerFeatures = [
     icon: Sparkle,
   },
   {
-    title: "Daily planner",
+    title: "Daily / weekly planner",
     description: "Organize every study session for today with a clear daily agenda.",
     icon: CalendarDays,
-  },
-  {
-    title: "Weekly planner",
-    description: "Preview your weekly study load and keep work balanced across days.",
-    icon: ListChecks,
   },
   {
     title: "Difficulty-based prioritization",
@@ -208,26 +207,28 @@ const PlannerForm = ({
   const removeSubject = (id: string) => setSubjects((current) => current.filter((item) => item.id !== id));
 
   return (
-    <Card className="bg-[#0a0a0a] border-white/10 shadow-xl p-6">
+    <Card className="border-ui shadow-xl p-6 bg-card">
       <CardHeader className="pb-4">
-        <CardTitle className="text-white">Smart Timetable Generation</CardTitle>
-        <CardDescription className="text-slate-400">Add subjects, exam dates, and the hours you can study each day.</CardDescription>
+        <CardTitle className="text-fg">Smart timetable generation</CardTitle>
+        <CardDescription className="text-muted-foreground">
+          Add subjects with difficulty + exam date, then generate an AI-friendly timetable you can edit.
+        </CardDescription>
       </CardHeader>
 
       <div className="grid gap-4 md:grid-cols-[1.2fr,_0.8fr]">
         <div className="space-y-4">
           <div className="grid gap-3 sm:grid-cols-3">
             <div>
-              <label className="text-xs uppercase tracking-[0.3em] text-slate-400">Subject</label>
+              <label className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Subject</label>
               <Input value={subjectName} onChange={(e) => setSubjectName(e.target.value)} placeholder="Subject name" />
             </div>
             <div>
-              <label className="text-xs uppercase tracking-[0.3em] text-slate-400">Exam date</label>
+              <label className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Exam date</label>
               <Input type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)} />
             </div>
             <div>
-              <label className="text-xs uppercase tracking-[0.3em] text-slate-400">Difficulty</label>
-              <select className="mt-1 block w-full rounded-md border border-white/10 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none" value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)}>
+              <label className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Difficulty</label>
+              <select className="mt-1 block w-full rounded-md border border-ui bg-popover px-3 py-2 text-sm text-fg outline-none" value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)}>
                 {difficultyOptions.map((option) => (
                   <option key={option} value={option}>{option}</option>
                 ))}
@@ -250,15 +251,15 @@ const PlannerForm = ({
           </div>
 
           {subjects.length > 0 ? (
-            <div className="space-y-3 rounded-3xl border border-white/10 bg-white/5 p-4">
+            <div className="space-y-3 rounded-3xl border border-ui bg-card p-4">
               <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Current subjects</p>
               {subjects.map((subject) => (
                 <div key={subject.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-3 last:border-b-0 last:pb-0">
                   <div>
-                    <p className="text-white font-semibold">{subject.name}</p>
+                    <p className="text-fg font-semibold">{subject.name}</p>
                     <p className="text-slate-400 text-sm">{subject.examDate} • {subject.difficulty}</p>
                   </div>
-                  <Button variant="outline" type="button" onClick={() => removeSubject(subject.id)} className="border-white/10 text-slate-200">Remove</Button>
+                  <Button variant="outline" type="button" onClick={() => removeSubject(subject.id)} className="border-ui text-slate-200">Remove</Button>
                 </div>
               ))}
             </div>
@@ -267,11 +268,11 @@ const PlannerForm = ({
           )}
         </div>
 
-        <div className="space-y-4 rounded-3xl border border-white/10 bg-slate-950/80 p-5">
+        <div className="space-y-4 rounded-3xl border border-ui bg-popover p-5">
           <div className="flex items-center gap-3">
             <Sparkle className="h-5 w-5 text-primary" />
             <div>
-              <p className="text-white font-semibold">AI plan details</p>
+              <p className="text-fg font-semibold">AI plan details</p>
               <p className="text-slate-400 text-sm">The algorithm prioritizes difficult subjects and upcoming exams.</p>
             </div>
           </div>
@@ -295,6 +296,101 @@ const PlannerForm = ({
         </div>
       </div>
     </Card>
+  );
+};
+
+const PrioritizationView = ({
+  subjects,
+  onJumpToGeneration,
+}: {
+  subjects: SubjectInput[];
+  onJumpToGeneration: () => void;
+}) => {
+  const sorted = useMemo(() => sortSubjectsByPriority(subjects), [subjects]);
+
+  return (
+    <div className="grid gap-6 lg:grid-cols-[1.2fr,_0.8fr]">
+      <Card className="border-ui shadow-xl bg-card">
+        <CardHeader className="p-6 border-b border-white/5">
+          <CardTitle className="text-fg">Difficulty-based prioritization</CardTitle>
+          <CardDescription className="text-muted-foreground">
+            We prioritize subjects by difficulty and how close the exam date is. This influences the AI timetable blocks.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-6 space-y-4">
+          {sorted.length === 0 ? (
+            <div className="rounded-3xl border border-dashed border-ui bg-popover p-6 text-muted-foreground">
+              Add subjects first to see prioritization.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {sorted.map((subject, index) => {
+                const score = calculatePriorityScore(subject);
+                const days = calculateDaysUntil(subject.examDate);
+                return (
+                  <div
+                    key={subject.id}
+                    className="rounded-2xl border border-ui bg-popover p-5 flex flex-wrap items-center justify-between gap-4"
+                  >
+                    <div className="min-w-[220px]">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-black uppercase tracking-[0.3em] text-muted-foreground">
+                          Priority {index + 1}
+                        </span>
+                        <span className={`rounded-full px-2 py-1 text-xs font-semibold ${getColorTag(subject.difficulty)}`}>
+                          {subject.difficulty}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-black text-fg mt-2">{subject.name}</h3>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Exam in <span className="text-fg font-semibold">{days}</span> day{days === 1 ? "" : "s"} • Score{" "}
+                        <span className="text-fg font-semibold">{score.toFixed(2)}</span>
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="h-2 w-40 rounded-full bg-white/5 overflow-hidden">
+                        <div
+                          className="h-full bg-primary"
+                          style={{
+                            width: `${Math.min(100, Math.round((score / Math.max(1, calculatePriorityScore(sorted[0]))) * 100))}%`,
+                          }}
+                        />
+                      </div>
+                      <Target className="h-5 w-5 text-primary" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card className="border-ui shadow-xl bg-card">
+        <CardHeader className="p-6 border-b border-white/5">
+          <CardTitle className="text-fg">How it affects the plan</CardTitle>
+          <CardDescription className="text-muted-foreground">
+            Higher-priority subjects receive more sessions across the week.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-6 space-y-4 text-sm text-muted-foreground">
+          <div className="space-y-3">
+            <div className="rounded-2xl border border-ui bg-popover p-4">
+              <p className="text-fg font-semibold">Inputs</p>
+              <p className="mt-1">Difficulty weight (Easy/Medium/Hard) + exam proximity.</p>
+            </div>
+            <div className="rounded-2xl border border-ui bg-popover p-4">
+              <p className="text-fg font-semibold">Outputs</p>
+              <p className="mt-1">More blocks allocated to high-priority subjects.</p>
+            </div>
+          </div>
+          <Button type="button" onClick={onJumpToGeneration} className="w-full bg-primary">
+            Go to Smart generation <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
@@ -390,7 +486,7 @@ const DailyView = ({
                       <Input
                         value={session.focus}
                         onChange={(event) => onUpdateSession(session.id, "focus", event.target.value)}
-                        className="border border-white"
+                        className="border border-white/20 bg-slate-950/50 text-white"
                       />
                     ) : (
                       <p className="text-slate-300">{session.focus}</p>
@@ -403,7 +499,7 @@ const DailyView = ({
                         type="time"
                         value={session.time}
                         onChange={(event) => onUpdateSession(session.id, "time", event.target.value)}
-                        className="border border-white"
+                        className="border border-white/20 bg-slate-950/50 text-white"
                       />
                     ) : (
                       <p className="text-slate-300">{session.time}</p>
@@ -415,7 +511,7 @@ const DailyView = ({
                       <Input
                         value={session.duration}
                         onChange={(event) => onUpdateSession(session.id, "duration", event.target.value)}
-                        className="border border-white"
+                        className="border border-white/20 bg-slate-950/50 text-white"
                       />
                     ) : (
                       <p className="text-slate-300">{session.duration}</p>
@@ -461,55 +557,217 @@ const DailyView = ({
 const WeeklyView = ({
   sessions,
   weekDates,
+  editing,
+  onUpdateSession,
 }: {
   sessions: Session[];
   weekDates: Date[];
+  editing: boolean;
+  onUpdateSession: (id: string, field: keyof Pick<Session, "time" | "duration" | "focus">, value: string) => void;
 }) => {
-  const grouped = weekDates.map((date) => {
-    const dateKey = formatDateKey(date);
-    const daySessions = sessions.filter((session) => session.date === dateKey).sort((a, b) => a.time.localeCompare(b.time));
-    const totalTime = daySessions.length * 60;
-    return { date, daySessions, totalTime };
-  });
+  const dayKeys = useMemo(() => weekDates.map((date) => formatDateKey(date)), [weekDates]);
+  const todayKey = useMemo(() => formatDateKey(new Date()), []);
+
+  const grouped = useMemo(() => {
+    const map = new Map<string, Session[]>();
+    dayKeys.forEach((key) => map.set(key, []));
+    sessions.forEach((session) => {
+      if (!map.has(session.date)) map.set(session.date, []);
+      map.get(session.date)!.push(session);
+    });
+    map.forEach((items) => items.sort((a, b) => a.time.localeCompare(b.time) || a.subject.localeCompare(b.subject)));
+    return map;
+  }, [dayKeys, sessions]);
+
+  const [selectedDayKey, setSelectedDayKey] = useState<string>(() => (grouped.has(todayKey) ? todayKey : dayKeys[0] ?? todayKey));
+
+  // keep selection valid if week changes
+  useEffect(() => {
+    if (!selectedDayKey || !dayKeys.includes(selectedDayKey)) {
+      setSelectedDayKey(dayKeys[0] ?? todayKey);
+    }
+  }, [dayKeys, selectedDayKey, todayKey]);
+
+  const selectedDate = useMemo(() => {
+    const index = dayKeys.indexOf(selectedDayKey);
+    return weekDates[index] ?? weekDates[0] ?? new Date();
+  }, [dayKeys, selectedDayKey, weekDates]);
+
+  const selectedSessions = grouped.get(selectedDayKey) ?? [];
 
   return (
     <Card className="bg-[#0a0a0a] border-white/10 shadow-xl">
       <CardHeader className="border-b border-white/5 p-6">
         <div>
           <CardTitle className="text-white">Weekly Planner</CardTitle>
-          <CardDescription className="text-slate-400">See the full week and time allocated to each subject.</CardDescription>
+          <CardDescription className="text-slate-400">
+            Quick glance week view — tap a day to expand{editing ? " (editing enabled)" : ""}.
+          </CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="p-6 space-y-4">
-        <div className="grid gap-4 lg:grid-cols-2">
-          {grouped.map((day) => (
-            <div key={day.date.toString()} className="rounded-3xl border border-white/10 bg-slate-950/80 p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm uppercase tracking-[0.3em] text-slate-400">{day.date.toLocaleDateString(undefined, { weekday: "long" })}</p>
-                  <p className="text-white font-semibold">{day.daySessions.length} sessions</p>
-                </div>
-                <span className="text-slate-300 text-sm">{day.totalTime} min</span>
-              </div>
-              <div className="mt-4 space-y-3">
-                {day.daySessions.length === 0 ? (
-                  <p className="text-slate-400 text-sm">No study sessions planned.</p>
-                ) : (
-                  day.daySessions.map((session) => (
-                    <div key={session.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <p className="text-sm uppercase tracking-[0.3em] text-slate-400">{session.time}</p>
-                        <span className={`rounded-full px-2 py-1 text-xs font-semibold ${getColorTag(session.difficulty)}`}>{session.difficulty}</span>
-                      </div>
-                      <h4 className="mt-2 text-white font-semibold">{session.subject}</h4>
-                      <p className="mt-1 text-slate-400 text-sm">{session.focus}</p>
+      <CardContent className="p-6 space-y-6">
+        {/* Week strip (glance view) */}
+        <div className="overflow-x-auto pb-2">
+          <div className="min-w-[980px] grid grid-cols-7 gap-4">
+            {weekDates.map((date) => {
+              const key = formatDateKey(date);
+              const items = grouped.get(key) ?? [];
+              const count = items.length;
+              const completed = items.filter((s) => s.completed).length;
+              const pct = count === 0 ? 0 : Math.round((completed / count) * 100);
+              const isSelected = key === selectedDayKey;
+              const isToday = key === todayKey;
+              const preview = items.slice(0, 3);
+              const remaining = Math.max(0, items.length - preview.length);
+
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setSelectedDayKey(key)}
+                  className={`text-left rounded-3xl border p-4 transition relative overflow-hidden ${
+                    isSelected ? "border-primary/60" : "border-white/10"
+                  } ${isSelected ? "bg-slate-950/80" : "bg-slate-950/60 hover:bg-slate-950/75"}`}
+                >
+                  {/* creative glow */}
+                  {isSelected && (
+                    <div className="absolute inset-0 pointer-events-none">
+                      <div className="absolute -inset-20 bg-[radial-gradient(circle_at_top,rgba(255,0,122,0.16),transparent_55%)]" />
                     </div>
-                  ))
-                )}
-              </div>
-            </div>
-          ))}
+                  )}
+
+                  <div className="relative flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.3em] text-slate-400">
+                        {date.toLocaleDateString(undefined, { weekday: "short" })}
+                      </p>
+                      <p className="text-white font-black mt-1 leading-none">
+                        {date.toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-2">
+                      <span className={`rounded-full px-2 py-1 text-[10px] font-bold ${isToday ? "bg-primary/20 text-primary" : "bg-white/5 text-slate-300"}`}>
+                        {count} sessions
+                      </span>
+                      <div className="h-1.5 w-16 rounded-full bg-white/5 overflow-hidden">
+                        <div className="h-full bg-primary" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="relative mt-4 space-y-2">
+                    {count === 0 ? (
+                      <div className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-3 text-slate-400 text-xs">
+                        No sessions
+                      </div>
+                    ) : (
+                      <>
+                        {preview.map((session) => (
+                          <div
+                            key={session.id}
+                            className={`rounded-2xl border border-white/10 bg-white/5 px-3 py-2 ${
+                              session.completed ? "opacity-60" : "opacity-100"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="text-slate-400 text-[10px] uppercase tracking-[0.3em]">{session.time}</p>
+                              <span className={`rounded-full px-2 py-1 text-[10px] font-semibold ${getColorTag(session.difficulty)}`}>
+                                {session.difficulty}
+                              </span>
+                            </div>
+                            <p className="text-white text-sm font-semibold truncate mt-1">{session.subject}</p>
+                          </div>
+                        ))}
+                        {remaining > 0 && (
+                          <div className="text-xs text-slate-400 font-semibold pl-1">+{remaining} more</div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        {/* Expanded day detail */}
+        <Card className="bg-slate-950/70 border-white/10">
+          <CardHeader className="p-6 border-b border-white/5">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <CardTitle className="text-white">
+                  {selectedDate.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
+                </CardTitle>
+                <CardDescription className="text-slate-400">
+                  {selectedSessions.length === 0 ? "No sessions scheduled." : "Sessions for the selected day."}
+                </CardDescription>
+              </div>
+              {selectedSessions.length > 0 && (
+                <span className="rounded-full bg-white/5 px-3 py-1 text-slate-300 text-sm">
+                  {selectedSessions.length} session{selectedSessions.length === 1 ? "" : "s"}
+                </span>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent className="p-6">
+            {selectedSessions.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-white/10 bg-white/5 p-6 text-slate-400">
+                Add sessions from the Daily planner or generate a timetable.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {selectedSessions.map((session) => (
+                  <div key={session.id} className="rounded-3xl border border-white/10 bg-white/5 p-5">
+                    <div className="flex flex-wrap items-start justify-between gap-4">
+                      <div className="min-w-[220px]">
+                        <p className="text-slate-400 text-xs uppercase tracking-[0.3em]">{session.time}</p>
+                        <h4 className="text-white font-bold text-lg mt-2">{session.subject}</h4>
+                        {!editing && <p className="text-slate-400 text-sm mt-1">{session.focus}</p>}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`rounded-full px-3 py-1 text-xs font-semibold ${getColorTag(session.difficulty)}`}>
+                          {session.difficulty}
+                        </span>
+                        <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-slate-300">{session.duration}</span>
+                      </div>
+                    </div>
+
+                    {editing && (
+                      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                        <div className="sm:col-span-2">
+                          <p className="text-slate-400 text-sm mb-2">Focus</p>
+                          <Input
+                            value={session.focus}
+                            onChange={(event) => onUpdateSession(session.id, "focus", event.target.value)}
+                            className="border border-white/20 bg-slate-950/50 text-white"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-slate-400 text-sm mb-2">Time</p>
+                          <Input
+                            type="time"
+                            value={session.time}
+                            onChange={(event) => onUpdateSession(session.id, "time", event.target.value)}
+                            className="border border-white/20 bg-slate-950/50 text-white"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-slate-400 text-sm mb-2">Duration</p>
+                          <Input
+                            value={session.duration}
+                            onChange={(event) => onUpdateSession(session.id, "duration", event.target.value)}
+                            className="border border-white/20 bg-slate-950/50 text-white"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </CardContent>
     </Card>
   );
@@ -519,7 +777,7 @@ const Planner = () => {
   const [subjects, setSubjects] = useState<SubjectInput[]>([]);
   const [dailyHours, setDailyHours] = useState(4);
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [activeSection, setActiveSection] = useState<"ai" | "daily" | "weekly">("ai");
+  const [activeSection, setActiveSection] = useState<"generation" | "prioritization" | "daily" | "weekly">("generation");
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -534,7 +792,7 @@ const Planner = () => {
         setSubjects(parsed.subjects ?? []);
         setDailyHours(parsed.dailyHours ?? 4);
         setSessions(parsed.sessions ?? []);
-        setActiveSection(parsed.activeSection ?? "ai");
+        setActiveSection(parsed.activeSection ?? "generation");
       } catch {
         // ignore invalid saved state
       }
@@ -578,33 +836,41 @@ const Planner = () => {
   const dailySessions = useMemo(() => sessions.filter((session) => session.date === today), [sessions, today]);
   const progress = dailySessions.length === 0 ? 0 : Math.round((dailySessions.filter((session) => session.completed).length / dailySessions.length) * 100);
 
-  const activeButtonClass = (section: "ai" | "daily" | "weekly") =>
+  const activeButtonClass = (section: "generation" | "prioritization" | "daily" | "weekly") =>
     section === activeSection ? "bg-primary text-white" : "border-white/10 bg-slate-950/60 text-slate-200";
 
   return (
-    <div className="min-h-screen bg-[#050505] text-slate-200">
-      <DashboardNavBar />
-      <main className="container py-10 space-y-8">
-        <section className="space-y-4">
-          <p className="text-sm uppercase tracking-[0.3em] text-primary font-black">AI Study Planner</p>
-          <div>
-            <h1 className="text-4xl font-black text-white">Interactive study planning</h1>
-            <p className="max-w-2xl text-slate-400 mt-3">
-              Build an AI-generated study timetable, manage today’s workload, and review the week with smart prioritization.
-            </p>
-          </div>
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div>
+          <h1 className="text-4xl font-black tracking-tight text-[hsl(var(--foreground))]">Interactive study planning</h1>
+          <p className="text-muted-foreground mt-2">Generate a smart timetable, prioritize by difficulty, and track your daily sessions.</p>
+        </div>
+
+        <section className="flex flex-wrap items-center gap-3">
+          <Button variant="outline" className={activeButtonClass("generation")} onClick={() => setActiveSection("generation")}>
+            Smart timetable generation
+          </Button>
+          <Button variant="outline" className={activeButtonClass("prioritization")} onClick={() => setActiveSection("prioritization")}>
+            Difficulty-based prioritization
+          </Button>
+          <Button variant="outline" className={activeButtonClass("daily")} onClick={() => setActiveSection("daily")}>
+            Daily planner
+          </Button>
+          <Button variant="outline" className={activeButtonClass("weekly")} onClick={() => setActiveSection("weekly")}>
+            Weekly planner
+          </Button>
+          <Button
+            variant={editing ? "secondary" : "outline"}
+            className="border-white/10"
+            onClick={() => setEditing((current) => !current)}
+          >
+            <Edit3 className="h-4 w-4 mr-2" />
+            {editing ? "Editing enabled" : "Edit study schedule"}
+          </Button>
         </section>
 
-        <section className="flex flex-wrap gap-3">
-          <Button variant="outline" className={activeButtonClass("ai")} onClick={() => setActiveSection("ai")}>Smart Timetable Generation</Button>
-          <Button variant="outline" className={activeButtonClass("daily")} onClick={() => setActiveSection("daily")}>Daily Planner</Button>
-          <Button variant="outline" className={activeButtonClass("weekly")} onClick={() => setActiveSection("weekly")}>Weekly Planner</Button>
-          <Button variant={editing ? "secondary" : "outline"} className="border-white/10" onClick={() => setEditing((current) => !current)}>{editing ? "Editing enabled" : "Enable schedule editing"}</Button>
-        </section>
-
-        <div className="grid gap-6 lg:grid-cols-[1.4fr,_0.6fr]">
-          <div className="space-y-6">
-            {activeSection === "ai" && (
+        <div className="space-y-6">
+            {activeSection === "generation" && (
               <PlannerForm
                 subjects={subjects}
                 setSubjects={setSubjects}
@@ -612,6 +878,13 @@ const Planner = () => {
                 setDailyHours={setDailyHours}
                 onGenerate={handleGenerate}
                 loading={loading}
+              />
+            )}
+
+            {activeSection === "prioritization" && (
+              <PrioritizationView
+                subjects={subjects}
+                onJumpToGeneration={() => setActiveSection("generation")}
               />
             )}
 
@@ -628,53 +901,15 @@ const Planner = () => {
               />
             )}
 
-            {activeSection === "weekly" && <WeeklyView sessions={sessions} weekDates={weekDates} />}
-          </div>
-
-          <aside className="space-y-6">
-            <Card className="bg-[#0a0a0a] border-white/10 shadow-xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="rounded-2xl bg-primary/10 p-3 text-primary">
-                  <ListChecks className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm text-slate-400 uppercase tracking-[0.3em] font-bold">Planner Insights</p>
-                  <h2 className="text-white font-black">What this planner does</h2>
-                </div>
-              </div>
-              <div className="space-y-3 text-slate-400 text-sm">
-                <p>• Generates a smart weekly timetable using exam proximity and difficulty.</p>
-                <p>• Allocates more time to difficult subjects and schedules them during peak hours.</p>
-                <p>• Displays a dynamic daily view with completion tracking.</p>
-                <p>• Shows a full weekly view with time allocation per day.</p>
-                <p>• Saves schedule updates in localStorage for persistence.</p>
-              </div>
-            </Card>
-
-            <Card className="bg-[#0a0a0a] border-white/10 shadow-xl p-6">
-              <CardTitle className="text-white text-lg mb-3">Plan summary</CardTitle>
-              <div className="space-y-4 text-slate-300 text-sm">
-                <div className="flex justify-between gap-2">
-                  <span>Subjects</span>
-                  <span>{subjects.length}</span>
-                </div>
-                <div className="flex justify-between gap-2">
-                  <span>Daily hours</span>
-                  <span>{dailyHours}</span>
-                </div>
-                <div className="flex justify-between gap-2">
-                  <span>Generated sessions</span>
-                  <span>{sessions.length}</span>
-                </div>
-                <div className="flex justify-between gap-2">
-                  <span>Current view</span>
-                  <span>{activeSection === "ai" ? "AI Plan" : activeSection === "daily" ? "Daily" : "Weekly"}</span>
-                </div>
-              </div>
-            </Card>
-          </aside>
+            {activeSection === "weekly" && (
+              <WeeklyView
+                sessions={sessions}
+                weekDates={weekDates}
+                editing={editing}
+                onUpdateSession={updateSession}
+              />
+            )}
         </div>
-      </main>
     </div>
   );
 };
