@@ -109,7 +109,7 @@ const Navbar = () => {
                     value={subjectName}
                     onChange={(e) => setSubjectName(e.target.value)}
                     placeholder="Add subject"
-                    className="rounded-full px-3 py-1 text-sm bg-white/5 border border-white/10 text-slate-200 outline-none"
+                    className="rounded-full px-3 py-1 text-sm bg-popover border border-ui text-fg outline-none"
                   />
                   <Button onClick={() => addSubjectQuick(subjectName)} size="sm">Add</Button>
                   <Button variant="ghost" size="sm" onClick={() => { setShowAdd(false); setSubjectName(""); }}>Cancel</Button>
@@ -172,7 +172,7 @@ const Navbar = () => {
                         value={subjectName}
                         onChange={(e) => setSubjectName(e.target.value)}
                         placeholder="Add subject"
-                        className="rounded-full px-3 py-1 text-sm bg-white/5 border border-white/10 text-slate-200 outline-none w-full"
+                        className="rounded-full px-3 py-1 text-sm bg-popover border border-ui text-fg outline-none w-full"
                       />
                       <Button onClick={() => { addSubjectQuick(subjectName); setMobileOpen(false); }} size="sm">Add</Button>
                       <Button variant="ghost" size="sm" onClick={() => { setShowAdd(false); setSubjectName(""); setMobileOpen(false); }}>Cancel</Button>

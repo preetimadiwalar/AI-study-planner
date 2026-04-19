@@ -35,6 +35,22 @@
         });
       })();
     </script>
+    <!-- Apply saved theme early to avoid FOUC -->
+    <script>
+      (function(){
+        try {
+          var key = 'site-theme';
+          var t = localStorage.getItem(key);
+          if (t === 'light') {
+            document.documentElement.classList.add('light');
+            document.documentElement.classList.remove('dark');
+          } else if (t === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          }
+        } catch(e) { /* ignore */ }
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

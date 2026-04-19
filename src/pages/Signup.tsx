@@ -31,8 +31,8 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: "#f5f5f5" }}>
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8" style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}>
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'hsl(var(--background))', color: 'hsl(var(--foreground))' }}>
+      <div className="w-full max-w-md rounded-2xl p-8 bg-card" style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}>
         {/* Header */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
@@ -41,23 +41,23 @@ const Signup = () => {
           </Link>
           
           {/* Tabs */}
-          <div className="flex gap-2 bg-gray-100 rounded-full p-1 mb-8">
-            <Link to="/login" className="flex-1 py-2 px-4 rounded-full font-semibold text-gray-600 hover:text-gray-800 transition">
+          <div className="flex gap-2 bg-popover rounded-full p-1 mb-8">
+            <Link to="/login" className="flex-1 py-2 px-4 rounded-full font-semibold text-muted-foreground hover:text-fg transition">
               Login
             </Link>
-            <button className="flex-1 py-2 px-4 rounded-full font-semibold text-white" style={{ backgroundColor: "#0891b2" }}>
+            <button className="flex-1 py-2 px-4 rounded-full font-semibold text-primary-foreground" style={{ backgroundColor: "#0891b2" }}>
               Register
             </button>
           </div>
 
-          <h1 className="text-3xl font-bold mb-2" style={{ color: "#1f2937" }}>Create Account</h1>
-          <p className="text-gray-500">Sign up to start planning your studies</p>
+          <h1 className="text-3xl font-bold mb-2 text-fg">Create Account</h1>
+          <p className="text-muted-foreground">Sign up to start planning your studies</p>
         </div>
 
         {/* Form - Scrollable */}
         <form onSubmit={handleSubmit} className="space-y-4 max-h-96 overflow-y-auto pr-2">
           <div>
-            <Label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
+            <Label className="block text-sm font-semibold mb-2 text-muted-foreground">
               Full Name
             </Label>
             <Input
@@ -65,12 +65,12 @@ const Signup = () => {
               placeholder="John Doe"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full px-4 py-2 border border-ui rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-popover text-fg"
             />
           </div>
 
           <div>
-            <Label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
+            <Label className="block text-sm font-semibold mb-2 text-muted-foreground">
               Email Address
             </Label>
             <Input
@@ -80,12 +80,12 @@ const Signup = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full px-4 py-2 border border-ui rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-popover text-fg"
             />
           </div>
 
           <div>
-            <Label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
+            <Label className="block text-sm font-semibold mb-2 text-muted-foreground">
               Phone Number
             </Label>
             <Input
@@ -94,12 +94,12 @@ const Signup = () => {
               placeholder="+91 12345 67890"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full px-4 py-2 border border-ui rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-popover text-fg"
             />
           </div>
 
           <div>
-            <Label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
+            <Label className="block text-sm font-semibold mb-2 text-muted-foreground">
               College Name
             </Label>
             <Input
@@ -107,12 +107,12 @@ const Signup = () => {
               placeholder="Your College"
               value={formData.college}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full px-4 py-2 border border-ui rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-popover text-fg"
             />
           </div>
 
           <div>
-            <Label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
+            <Label className="block text-sm font-semibold mb-2 text-muted-foreground">
               Department
             </Label>
             <Input
@@ -120,20 +120,19 @@ const Signup = () => {
               placeholder="Computer Science"
               value={formData.department}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full px-4 py-2 border border-ui rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-popover text-fg"
             />
           </div>
 
           <div>
-            <Label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
+            <Label className="block text-sm font-semibold mb-2 text-muted-foreground">
               Program
             </Label>
             <select
               id="program"
               value={formData.program}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white"
-              style={{ color: formData.program ? "#1f2937" : "#9ca3af" }}
+              className="w-full px-4 py-2 border border-ui rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-popover text-fg"
             >
               <option value="">Select Program</option>
               <option value="BE/B.Tech">BE/B.Tech</option>
@@ -152,15 +151,14 @@ const Signup = () => {
           </div>
 
           <div>
-            <Label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
+            <Label className="block text-sm font-semibold mb-2 text-muted-foreground">
               Semester
             </Label>
             <select
               id="semester"
               value={formData.semester}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white"
-              style={{ color: formData.semester ? "#1f2937" : "#9ca3af" }}
+              className="w-full px-4 py-2 border border-ui rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-popover text-fg"
             >
               <option value="">Select Semester</option>
               <option value="1st">1st Semester</option>
@@ -175,7 +173,7 @@ const Signup = () => {
           </div>
 
           <div>
-            <Label className="block text-sm font-semibold mb-2" style={{ color: "#374151" }}>
+            <Label className="block text-sm font-semibold mb-2 text-muted-foreground">
               Password
             </Label>
             <Input
@@ -185,19 +183,19 @@ const Signup = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full px-4 py-2 border border-ui rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-popover text-fg"
             />
           </div>
 
           <Button
             type="submit"
-            className="w-full py-3 font-semibold text-white rounded-lg transition-all hover:shadow-lg mt-6"
+            className="w-full py-3 font-semibold text-primary-foreground rounded-lg transition-all hover:shadow-lg mt-6"
             style={{ backgroundColor: "#0891b2" }}
           >
             Sign Up
           </Button>
 
-          <p className="text-center text-sm text-gray-600 mt-4">
+          <p className="text-center text-sm text-muted-foreground mt-4">
             Already have an account?{" "}
             <Link to="/login" className="font-semibold hover:underline" style={{ color: "#0891b2" }}>
               Log In

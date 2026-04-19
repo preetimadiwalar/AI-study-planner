@@ -126,9 +126,9 @@ const SubjectsSection: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-[#0a0a0a] border-white/10 shadow-xl overflow-hidden">
-        <CardHeader className="border-b border-white/5 bg-white/5">
-          <CardTitle className="text-white text-lg flex items-center gap-2">
+      <Card className="overflow-hidden" style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))', boxShadow: 'var(--shadow-card)' }}>
+        <CardHeader className="border-b border-ui bg-popover">
+          <CardTitle className="text-[hsl(var(--foreground))] text-lg flex items-center gap-2">
             <Edit2 className="h-4 w-4 text-primary" />
             {editingId ? "Edit Subject" : "Add New Subject"}
           </CardTitle>
@@ -136,21 +136,21 @@ const SubjectsSection: React.FC = () => {
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-black text-slate-500 ml-1">Subject Title</label>
+              <label className="text-[10px] uppercase tracking-widest font-black text-muted-foreground ml-1">Subject Title</label>
               <Input 
                 placeholder="e.g. Mathematics" 
                 value={name} 
                 onChange={(e) => setName(e.target.value)}
-                className="bg-white/5 border-white/10 text-white h-11 focus:border-primary/50 transition-all"
+                className="bg-popover border-ui text-fg h-11 focus:border-primary/50 transition-all"
               />
             </div>
             <div className="flex-[2] space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-black text-slate-500 ml-1">Subject Code</label>
+              <label className="text-[10px] uppercase tracking-widest font-black text-muted-foreground ml-1">Subject Code</label>
               <Input 
                 placeholder="e.g. CS101" 
                 value={code} 
                 onChange={(e) => setCode(e.target.value)}
-                className="bg-white/5 border-white/10 text-white h-11 focus:border-primary/50 transition-all"
+                className="bg-popover border-ui text-fg h-11 focus:border-primary/50 transition-all"
               />
             </div>
             <div className="flex items-end gap-2">
@@ -163,7 +163,7 @@ const SubjectsSection: React.FC = () => {
                 {editingId ? "Update Subject" : "Register Subject"}
               </Button>
               {editingId && (
-                <Button variant="ghost" onClick={resetForm} className="h-11 text-slate-400 hover:text-white">
+                <Button variant="ghost" onClick={resetForm} className="h-11 text-muted-foreground hover:text-fg">
                   Cancel
                 </Button>
               )}
@@ -172,9 +172,9 @@ const SubjectsSection: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-[#0a0a0a] border-white/10 shadow-xl overflow-hidden">
-        <CardHeader className="border-b border-white/5 p-4 flex flex-row items-center justify-between bg-white/5">
-          <CardTitle className="text-white text-lg">Subject Repository</CardTitle>
+      <Card className="overflow-hidden" style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))', boxShadow: 'var(--shadow-card)' }}>
+        <CardHeader className="border-b border-ui p-4 flex flex-row items-center justify-between bg-popover">
+          <CardTitle className="text-[hsl(var(--foreground))] text-lg">Subject Repository</CardTitle>
           <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
             {subjects.length} active units
           </div>
@@ -193,24 +193,24 @@ const SubjectsSection: React.FC = () => {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-white/5 hover:bg-transparent">
-                    <TableHead className="text-slate-500 font-black text-[10px] uppercase tracking-widest">Subject Name</TableHead>
-                    <TableHead className="text-slate-500 font-black text-[10px] uppercase tracking-widest">Code</TableHead>
-                    <TableHead className="text-right text-slate-500 font-black text-[10px] uppercase tracking-widest">Actions</TableHead>
+                  <TableRow className="border-ui hover:bg-transparent">
+                    <TableHead className="text-muted-foreground font-black text-[10px] uppercase tracking-widest">Subject Name</TableHead>
+                    <TableHead className="text-muted-foreground font-black text-[10px] uppercase tracking-widest">Code</TableHead>
+                    <TableHead className="text-right text-muted-foreground font-black text-[10px] uppercase tracking-widest">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {subjects.map((sub) => (
-                    <TableRow key={sub.id} className="border-white/5 hover:bg-white/2 transition-all group">
-                      <TableCell className="font-bold text-white py-4">{sub.name}</TableCell>
-                      <TableCell className="text-slate-400 text-sm py-4">{sub.code || "—"}</TableCell>
+                    <TableRow key={sub.id} className="border-ui hover:bg-popover transition-all group">
+                      <TableCell className="font-bold text-fg py-4">{sub.name}</TableCell>
+                      <TableCell className="text-muted-foreground text-sm py-4">{sub.code || "—"}</TableCell>
                       <TableCell className="text-right py-4">
                         <div className="flex justify-end gap-2">
                           <Button 
                             variant="ghost" 
                             size="icon" 
                             onClick={() => handleEdit(sub)}
-                            className="h-8 w-8 text-slate-400 hover:text-primary hover:bg-primary/10"
+                            className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
                           >
                             <Edit2 className="h-4 w-4" />
                           </Button>
@@ -218,7 +218,7 @@ const SubjectsSection: React.FC = () => {
                             variant="ghost" 
                             size="icon" 
                             onClick={() => handleDelete(sub.id)}
-                            className="h-8 w-8 text-slate-400 hover:text-destructive hover:bg-destructive/10"
+                            className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
